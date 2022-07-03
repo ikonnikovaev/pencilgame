@@ -1,3 +1,6 @@
+import random
+
+
 def choose_player(first_player, second_player):
     print(f"Who will be the first ({first_player}, {second_player}):")
     beginning_player = input()
@@ -19,7 +22,7 @@ def is_positive_number(x):
         return False
     return True
 
-def take_pencils(x, n):
+def user_take_pencils(x, n):
     if x not in ['1', '2', '3']:
         print("Possible values: '1', '2' or '3'")
         return 0
@@ -28,6 +31,15 @@ def take_pencils(x, n):
         print("Too many pencils were taken")
         return 0
     return x
+
+def bot_take_pencils(n):
+    r = n % 4
+    if r == 0:
+        r = 4
+    if r != 1:
+        return r - 1
+    else:
+        return random.randint(1, min(n, 3))
 
 
 first_player = "Alice"
@@ -43,14 +55,19 @@ while n > 0:
     print("|" * n)
     if i % 2 == 0:
         print(f"{first_player}'s turn")
+        x = user_take_pencils(input(), n)
+        while not x:
+            x = user_take_pencils(input(), n)
+        n = n - x
     else:
         print(f"{second_player}'s turn")
-
-    x = take_pencils(input(), n)
-    while not x:
-        x = take_pencils(input(), n)
-    n = n - x
+        x = bot_take_pencils(n)
+        print(x)
+        n = n - x
     i += 1
+
+
+
 if i % 2 == 0:
     print(f"{first_player} won!")
 else:
